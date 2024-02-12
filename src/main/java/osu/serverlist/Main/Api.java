@@ -31,7 +31,7 @@ public class Api extends Spark {
 		
 		Database database = new Database();
 		database.setDefaultSettings();
-		database.setMaximumPoolSize(8);
+		database.setMaximumPoolSize(5);
 		database.setConnectionTimeout(3000);
 		database.connectToMySQL(configObj.getServerIp(), configObj.getMySQLUserName(), configObj.getMySQLPassword(), configObj.getMySQLDatabase(), ServerTimezone.UTC);
 

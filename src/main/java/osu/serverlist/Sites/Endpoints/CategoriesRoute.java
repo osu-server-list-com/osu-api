@@ -13,14 +13,10 @@ public class CategoriesRoute extends JsonProcessingRoute {
 
     private final String SQL_QUERY_CATEGORIES = "SELECT * FROM un_categories";
 
-    public CategoriesRoute() {
-        super();
-    }
 
     @Override
     public Object handle(Request request, Response response) {
-        response.type("application/json");
-
+        super.handle(request, response);
         ResultSet catRs = mysql.Query(SQL_QUERY_CATEGORIES);
 
         ArrayList<Categorie> catList = new ArrayList<>();

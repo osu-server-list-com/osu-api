@@ -13,7 +13,7 @@ import spark.Response;
 
 public class ServersRoute extends JsonProcessingRoute {
 
-    private final String SQL_QUERY = "SELECT * FROM un_servers WHERE `id` = ?";
+    private final String SQL_QUERY = "SELECT * FROM `un_servers`";
     private final String SQL_QUERY_CATEGORIES = "SELECT `name` FROM un_categories WHERE `id` = ?";
 
     @Override
@@ -51,6 +51,7 @@ public class ServersRoute extends JsonProcessingRoute {
         } catch (SQLException e) {
             return internalDbError();
         } catch (Exception e) {
+            e.printStackTrace();
             return internalError();
         }
     }
