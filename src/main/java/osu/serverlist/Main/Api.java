@@ -12,6 +12,8 @@ import freemarker.template.Configuration;
 import osu.serverlist.Input.Commands.ExceptionManager;
 import osu.serverlist.Sites.Endpoints.BanchoPyStatsRoute;
 import osu.serverlist.Sites.Endpoints.CategoriesRoute;
+import osu.serverlist.Sites.Endpoints.ChartDataRoute;
+import osu.serverlist.Sites.Endpoints.ChartTypesRoute;
 import osu.serverlist.Sites.Endpoints.ServerRoute;
 import osu.serverlist.Sites.Endpoints.ServersRoute;
 import osu.serverlist.Sites.Models.Config;
@@ -50,7 +52,8 @@ public class Api extends Spark {
 		router.get("/api/v1/servers", new ServersRoute());
 		router.get("/api/v1/categories", new CategoriesRoute());
 		router.get("/api/v1/banchopy/stats", new BanchoPyStatsRoute());
-
+		router.get("/api/v1/chart/types", new ChartTypesRoute());
+		router.get("/api/v1/chart/data", new ChartDataRoute());
 		cmd.registerCommand(new ExceptionManager());
 		cmd.initialize();
 
