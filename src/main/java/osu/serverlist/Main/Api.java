@@ -4,7 +4,9 @@ import java.io.IOException;
 
 import commons.marcandreher.Commons.Database;
 import commons.marcandreher.Commons.Database.ServerTimezone;
+import commons.marcandreher.Commons.Flogger.Prefix;
 import commons.marcandreher.Commons.Flogger;
+import commons.marcandreher.Commons.MySQL;
 import commons.marcandreher.Commons.Router;
 import commons.marcandreher.Commons.WebServer;
 import commons.marcandreher.Input.CommandHandler;
@@ -30,7 +32,7 @@ public class Api extends Spark {
 	public static void main(String[] args) {
 		configObj = Config.initializeNewConfig();
 		Flogger logger = new Flogger (configObj.getLogLevel());
-		
+		MySQL.LOGLEVEL = 5;
 		Database database = new Database();
 		database.setDefaultSettings();
 		database.setMaximumPoolSize(5);
@@ -39,6 +41,7 @@ public class Api extends Spark {
 
 		WebServer webServer = new WebServer(logger, (short)2);
 		webServer.setThreadPool(0, 20, 3000);
+		webServer.setPrefix(Prefix.API);
 		CommandHandler cmd = new CommandHandler(logger);
 
 		try {

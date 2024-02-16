@@ -8,6 +8,7 @@ import commons.marcandreher.Engine.JsonProcessingRoute;
 import commons.marcandreher.Utils.TimestampConverter;
 import osu.serverlist.Input.Commands.ExceptionManager;
 import osu.serverlist.Sites.Models.Server;
+import osu.serverlist.Sites.Models.ServerHelper;
 import spark.Request;
 import spark.Response;
 
@@ -33,7 +34,7 @@ public class ServerRoute extends JsonProcessingRoute {
                 server = new Server();
                 server.setName(serverResultSet.getString("name"));
                 server.setId(serverResultSet.getInt("id"));
-                server.setLogo_loc(serverResultSet.getString("logo_loc"));
+                server.setLogo_loc(ServerHelper.repairLogo(serverResultSet.getString("logo_loc")));
                 server.setPlayers(serverResultSet.getInt("players"));
                 server.setVotes(serverResultSet.getInt("votes"));
                 server.setCreated(TimestampConverter.getDiffString(serverResultSet.getString("created")));
