@@ -2,6 +2,7 @@ package osu.serverlist.Main;
 
 import java.io.IOException;
 
+import commons.marcandreher.Cache.CacheTimer;
 import commons.marcandreher.Commons.Database;
 import commons.marcandreher.Commons.Database.ServerTimezone;
 import commons.marcandreher.Commons.Flogger.Prefix;
@@ -11,10 +12,12 @@ import commons.marcandreher.Commons.Router;
 import commons.marcandreher.Commons.WebServer;
 import commons.marcandreher.Input.CommandHandler;
 import freemarker.template.Configuration;
+import osu.serverlist.Cache.RefreshHeatmap;
 import osu.serverlist.Input.Commands.ExceptionManager;
 import osu.serverlist.Sites.Endpoints.BanchoPyStatsRoute;
 import osu.serverlist.Sites.Endpoints.CategoriesRoute;
 import osu.serverlist.Sites.Endpoints.ChartDataRoute;
+import osu.serverlist.Sites.Endpoints.ChartHeatMapRoute;
 import osu.serverlist.Sites.Endpoints.ChartTypesRoute;
 import osu.serverlist.Sites.Endpoints.ServerRoute;
 import osu.serverlist.Sites.Endpoints.ServersRoute;
@@ -50,6 +53,7 @@ public class Api extends Spark {
 			e.printStackTrace();
 		}
 
+		
 		Router router = new Router(logger);
 		router.get("/api/v1/server", new ServerRoute());
 		router.get("/api/v1/servers", new ServersRoute());
@@ -57,8 +61,14 @@ public class Api extends Spark {
 		router.get("/api/v1/banchopy/stats", new BanchoPyStatsRoute());
 		router.get("/api/v1/chart/types", new ChartTypesRoute());
 		router.get("/api/v1/chart/data", new ChartDataRoute());
+
+		router.get("/api/v1/heatmap", new ChartHeatMapRoute());
 		cmd.registerCommand(new ExceptionManager());
 		cmd.initialize();
+
+		
+		CacheTimer ct = new CacheTimer(30, 1, logger);
+		ct.addAction(new RefreshHeatmap());
 
 	}
 }
