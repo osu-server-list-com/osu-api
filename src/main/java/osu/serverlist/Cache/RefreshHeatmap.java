@@ -69,7 +69,7 @@ public class RefreshHeatmap extends DatabaseAction {
                         }
 
                     }
-                    heatMapStats.stats.add(stats);
+                    heatMapStats.stats = stats;
                     dateItems.put(entry.getKey(), heatMapStats);
                 }
 
