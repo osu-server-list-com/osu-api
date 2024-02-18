@@ -80,11 +80,11 @@ public class RefreshHeatmap extends DatabaseAction {
 
 
                     }
-                    int score = stats.votes;
+                    int score = (stats.votes * 2);
                     score += stats.getplayers();
                     stats.setScore(score);
 
-                    
+
                     heatMapStats.stats = stats;
                     dateItems.put(entry.getKey(), heatMapStats);
                 }
