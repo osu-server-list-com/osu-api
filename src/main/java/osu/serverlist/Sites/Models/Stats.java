@@ -10,6 +10,7 @@ public class Stats {
     private int players = 0;
     private int maps = 0;
     private int CLANS = 0;
+    public int votes = 0;
 
     public int getCLANS() {
         return this.CLANS;

@@ -15,6 +15,7 @@ public class RefreshHeatmap extends DatabaseAction {
     private final String SERVER_SQL = "SELECT * FROM `un_servers`";
     private final String HEATMAP_STAT_SQL = "SELECT * FROM `un_crawler` WHERE `srv_id` = ?";
     private final String HEATMAP_STAT_GET_SQL = "SELECT * FROM `un_crawler` WHERE `srv_id` = ? AND `date` = ?";
+    private final String HEATMAP_STAT_VOTE_SQL = "SELECT COUNT(`id`) AS `votes` FROM `un_votes` WHERE votetime = ? AND `srv_id` = ?;";
 
     public static HashMap<Integer, HeatMapStat> cacheItems = new HashMap<>();
 
@@ -41,6 +42,14 @@ public class RefreshHeatmap extends DatabaseAction {
                     Stats stats = new Stats();
                     ResultSet heatmapGetResultSet = mysql.Query(HEATMAP_STAT_GET_SQL, String.valueOf(serverId),
                             entry.getKey());
+
+                    ResultSet voteResultSet = mysql.Query(HEATMAP_STAT_VOTE_SQL, entry.getKey(), String.valueOf(serverId)); 
+                    while (voteResultSet.next()) {
+                        stats.votes = voteResultSet.getInt("votes");
+                        
+                    }
+                
+                    
                     while (heatmapGetResultSet.next()) {
                         switch (heatmapGetResultSet.getString("type")) {
                             case "PLAYERCHECK":
@@ -68,7 +77,14 @@ public class RefreshHeatmap extends DatabaseAction {
                                 break;
                         }
 
+
+
                     }
+                    int score = stats.votes;
+                    score += stats.getplayers();
+                    stats.setScore(score);
+
+                    
                     heatMapStats.stats = stats;
                     dateItems.put(entry.getKey(), heatMapStats);
                 }
