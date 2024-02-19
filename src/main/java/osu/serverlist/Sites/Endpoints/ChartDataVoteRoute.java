@@ -22,7 +22,7 @@ public class ChartDataVoteRoute extends JsonProcessingRoute {
 			"LEFT JOIN un_votes v ON DATE(v.votetime) = d.date AND v.srv_id = ? " +
 			"GROUP BY d.date ORDER BY d.date;";
 
-	private final String MONTHLYVOTES_SQL = "SELECT m.month AS `date`, IFNULL(COUNT(v.votetime), 0) AS count " +
+	private final String YEARLYVOTES_SQL = "SELECT m.month AS `date`, IFNULL(COUNT(v.votetime), 0) AS count " +
 			"FROM (SELECT 1 AS month UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 " +
 			"UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10 " +
 			"UNION SELECT 11 UNION SELECT 12) AS m " +
@@ -48,8 +48,8 @@ public class ChartDataVoteRoute extends JsonProcessingRoute {
             case "WEEKLY":
                 serverResultSet = mysql.Query(WEEKLYVOTES_SQL, request.queryParams("id"));
                 break;
-            case "MONTHLY":
-                serverResultSet = mysql.Query(MONTHLYVOTES_SQL, request.queryParams("id"));
+            case "YEARLY":
+                serverResultSet = mysql.Query(YEARLYVOTES_SQL, request.queryParams("id"));
                 break;
             default:
                 return customError("no valid type");
