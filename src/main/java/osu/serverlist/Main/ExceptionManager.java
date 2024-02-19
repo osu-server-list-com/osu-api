@@ -1,4 +1,4 @@
-package osu.serverlist.Input.Commands;
+package osu.serverlist.Main;
 
 import java.util.ArrayList;
 

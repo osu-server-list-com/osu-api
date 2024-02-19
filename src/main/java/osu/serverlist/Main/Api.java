@@ -13,10 +13,10 @@ import commons.marcandreher.Commons.WebServer;
 import commons.marcandreher.Input.CommandHandler;
 import freemarker.template.Configuration;
 import osu.serverlist.Cache.RefreshHeatmap;
-import osu.serverlist.Input.Commands.ExceptionManager;
 import osu.serverlist.Sites.Endpoints.BanchoPyStatsRoute;
 import osu.serverlist.Sites.Endpoints.CategoriesRoute;
 import osu.serverlist.Sites.Endpoints.ChartDataRoute;
+import osu.serverlist.Sites.Endpoints.ChartDataVoteRoute;
 import osu.serverlist.Sites.Endpoints.ChartHeatMapRoute;
 import osu.serverlist.Sites.Endpoints.ChartTypesRoute;
 import osu.serverlist.Sites.Endpoints.ServerRoute;
@@ -61,6 +61,7 @@ public class Api extends Spark {
 		router.get("/api/v1/banchopy/stats", new BanchoPyStatsRoute());
 		router.get("/api/v1/chart/types", new ChartTypesRoute());
 		router.get("/api/v1/chart/data", new ChartDataRoute());
+		router.get("/api/v1/chart/votes/data", new ChartDataVoteRoute());
 
 		router.get("/api/v1/heatmap", new ChartHeatMapRoute());
 		cmd.registerCommand(new ExceptionManager());

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import commons.marcandreher.Engine.JsonProcessingRoute;
 import commons.marcandreher.Utils.TimestampConverter;
-import osu.serverlist.Input.Commands.ExceptionManager;
+import osu.serverlist.Main.ExceptionManager;
 import osu.serverlist.Sites.Models.Server;
 import osu.serverlist.Sites.Models.ServerHelper;
 import spark.Request;
