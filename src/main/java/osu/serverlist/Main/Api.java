@@ -1,6 +1,7 @@
 package osu.serverlist.Main;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import commons.marcandreher.Cache.CacheTimer;
 import commons.marcandreher.Commons.Database;
@@ -68,7 +69,7 @@ public class Api extends Spark {
 		cmd.initialize();
 
 		
-		CacheTimer ct = new CacheTimer(30, 1, logger);
+		CacheTimer ct = new CacheTimer(30, 1, TimeUnit.MINUTES);
 		ct.addAction(new RefreshHeatmap());
 
 	}
