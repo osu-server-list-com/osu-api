@@ -92,14 +92,13 @@ public class RefreshHeatmap extends DatabaseAction {
 
                 stat.dateItems = dateItems;
                 cacheItems.put(serverResultSet.getInt("id"), stat);
-                return;
-
+           
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(e);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
 
     }
