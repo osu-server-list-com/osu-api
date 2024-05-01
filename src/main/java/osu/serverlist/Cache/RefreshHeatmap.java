@@ -91,6 +91,7 @@ public class RefreshHeatmap extends DatabaseAction {
 
                 stat.dateItems = dateItems;
                 cacheItems.put(serverResultSet.getInt("id"), stat);
+                return;
 
             }
 
