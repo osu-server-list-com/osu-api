@@ -64,13 +64,14 @@ public class Api extends Spark {
 		router.get("/api/v1/chart/data", new ChartDataRoute());
 		router.get("/api/v1/chart/votes/data", new ChartDataVoteRoute());
 
+		CacheTimer ct = new CacheTimer(30, 1, TimeUnit.MINUTES);
+		ct.addAction(new RefreshHeatmap());
+
 		router.get("/api/v1/heatmap", new ChartHeatMapRoute());
 		cmd.registerCommand(new ExceptionManager());
 		cmd.initialize();
 
 		
-		CacheTimer ct = new CacheTimer(30, 1, TimeUnit.MINUTES);
-		ct.addAction(new RefreshHeatmap());
-
+		
 	}
 }
