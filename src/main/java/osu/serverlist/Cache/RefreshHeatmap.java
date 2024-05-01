@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import commons.marcandreher.Cache.Action.DatabaseAction;
 import commons.marcandreher.Commons.Flogger;
@@ -17,7 +18,7 @@ public class RefreshHeatmap extends DatabaseAction {
     private final String HEATMAP_STAT_GET_SQL = "SELECT * FROM `un_crawler` WHERE `srv_id` = ? AND `date` = ?";
     private final String HEATMAP_STAT_VOTE_SQL = "SELECT COUNT(`id`) AS `votes` FROM `un_votes` WHERE votetime = ? AND `srv_id` = ?;";
 
-    public static HashMap<Integer, HeatMapStat> cacheItems = new HashMap<>();
+    public static ConcurrentHashMap<Integer, HeatMapStat> cacheItems = new ConcurrentHashMap<Integer, HeatMapStat>();
 
     @Override
     public void executeAction(Flogger logger) {
