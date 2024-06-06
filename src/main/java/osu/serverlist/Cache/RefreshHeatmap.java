@@ -2,7 +2,6 @@ package osu.serverlist.Cache;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -13,12 +12,11 @@ import osu.serverlist.Sites.Models.HeatMapStats;
 import osu.serverlist.Sites.Models.Stats;
 
 public class RefreshHeatmap extends DatabaseAction {
-    private final String SERVER_SQL = "SELECT * FROM `un_servers`";
-    private final String HEATMAP_STAT_SQL = "SELECT * FROM `un_crawler` WHERE `srv_id` = ?";
-    private final String HEATMAP_STAT_GET_SQL = "SELECT * FROM `un_crawler` WHERE `srv_id` = ? AND `date` = ?";
-    private final String HEATMAP_STAT_VOTE_SQL = "SELECT COUNT(`id`) AS `votes` FROM `un_votes` WHERE votetime = ? AND `srv_id` = ?;";
+    private static final String SERVER_SQL = "SELECT * FROM `un_servers` WHERE `visible` = 1";
+    private static final String HEATMAP_STAT_SQL = "SELECT `date`, `type`, `value` FROM `un_crawler` WHERE `srv_id` = ?";
+    private static final String HEATMAP_STAT_VOTE_SQL = "SELECT COUNT(`id`) AS `votes` FROM `un_votes` WHERE votetime = ? AND `srv_id` = ?";
 
-    public static ConcurrentHashMap<Integer, HeatMapStat> cacheItems = new ConcurrentHashMap<Integer, HeatMapStat>();
+    public static ConcurrentHashMap<Integer, HeatMapStat> cacheItems = new ConcurrentHashMap<>();
 
     @Override
     public void executeAction(Flogger logger) {
@@ -27,72 +25,71 @@ public class RefreshHeatmap extends DatabaseAction {
             ResultSet serverResultSet = mysql.Query(SERVER_SQL);
 
             while (serverResultSet.next()) {
-
                 HeatMapStat stat = new HeatMapStat();
                 int serverId = serverResultSet.getInt("id");
 
-                HashMap<String, HeatMapStats> dateItems = new HashMap<>();
+                ConcurrentHashMap<String, HeatMapStats> dateItems = new ConcurrentHashMap<>();
 
                 ResultSet heatmapResultSet = mysql.Query(HEATMAP_STAT_SQL, String.valueOf(serverId));
                 while (heatmapResultSet.next()) {
-                    dateItems.put(heatmapResultSet.getString("date"), null);
+                    String date = heatmapResultSet.getString("date");
+                    HeatMapStats heatMapStats = dateItems.get(date);
+                    if (heatMapStats == null) {
+                        heatMapStats = new HeatMapStats();
+                        dateItems.put(date, heatMapStats);
+                    }
+                    String type = heatmapResultSet.getString("type");
+                    int value = heatmapResultSet.getInt("value");
+
+                    Stats stats = heatMapStats.stats;
+                    if (stats == null) {
+                        stats = new Stats();
+                        heatMapStats.stats = stats;
+                    }
+
+                    switch (type) {
+                        case "PLAYERCHECK":
+                            stats.setplayers(value);
+                            break;
+                        case "PLAYS":
+                            stats.setplays(value);
+                            break;
+                        case "MAPS":
+                            stats.setmaps(value);
+                            break;
+                        case "CLANS":
+                            stats.setCLANS(value);
+                            break;
+                        case "REGISTERED_PLAYERS":
+                            stats.setregistered(value);
+                            break;
+                        case "BANNED_PLAYERS":
+                            stats.setbanned(value);
+                            break;
+                    }
                 }
 
                 for (Map.Entry<String, HeatMapStats> entry : dateItems.entrySet()) {
-                    HeatMapStats heatMapStats = new HeatMapStats();
-                    Stats stats = new Stats();
-                    ResultSet heatmapGetResultSet = mysql.Query(HEATMAP_STAT_GET_SQL, String.valueOf(serverId),
-                            entry.getKey());
+                    String date = entry.getKey();
+                    HeatMapStats heatMapStats = entry.getValue();
+                    Stats stats = heatMapStats.stats;
 
-                    ResultSet voteResultSet = mysql.Query(HEATMAP_STAT_VOTE_SQL, entry.getKey(), String.valueOf(serverId)); 
-                    while (voteResultSet.next()) {
+                    if (stats == null) {
+                        stats = new Stats();
+                        heatMapStats.stats = stats;
+                    }
+
+                    ResultSet voteResultSet = mysql.Query(HEATMAP_STAT_VOTE_SQL, date, String.valueOf(serverId));
+                    if (voteResultSet.next()) {
                         stats.votes = voteResultSet.getInt("votes");
-                        
                     }
-                
-                    
-                    while (heatmapGetResultSet.next()) {
-                        switch (heatmapGetResultSet.getString("type")) {
-                            case "PLAYERCHECK":
-                                stats.setplayers(heatmapGetResultSet.getInt("value"));
-                                break;
 
-                            case "PLAYS":
-                                stats.setplays(heatmapGetResultSet.getInt("value"));
-                                break;
-
-                            case "MAPS":
-                                stats.setmaps(heatmapGetResultSet.getInt("value"));
-                                break;
-
-                            case "CLANS":
-                                stats.setCLANS(heatmapGetResultSet.getInt("value"));
-                                break;
-
-                            case "REGISTERED_PLAYERS":
-                                stats.setregistered(heatmapGetResultSet.getInt("value"));
-                                break;
-
-                            case "BANNED_PLAYERS":
-                                stats.setbanned(heatmapGetResultSet.getInt("value"));
-                                break;
-                        }
-
-
-
-                    }
-                    int score = (stats.votes * 2);
-                    score += stats.getplayers();
+                    int score = (stats.votes * 2) + stats.getplayers();
                     stats.setScore(score);
-
-
-                    heatMapStats.stats = stats;
-                    dateItems.put(entry.getKey(), heatMapStats);
                 }
 
                 stat.dateItems = dateItems;
-                cacheItems.put(serverResultSet.getInt("id"), stat);
-           
+                cacheItems.put(serverId, stat);
             }
 
         } catch (SQLException e) {
@@ -100,7 +97,5 @@ public class RefreshHeatmap extends DatabaseAction {
         } catch (Exception e) {
             logger.error(e);
         }
-
     }
-
 }

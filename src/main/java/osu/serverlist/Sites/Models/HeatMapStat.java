@@ -1,7 +1,7 @@
 package osu.serverlist.Sites.Models;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class HeatMapStat {
-    public HashMap<String, HeatMapStats> dateItems = new HashMap<>();
+    public ConcurrentHashMap<String, HeatMapStats> dateItems = new ConcurrentHashMap<>();
 }
