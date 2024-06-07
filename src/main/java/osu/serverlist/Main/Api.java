@@ -26,6 +26,7 @@ import osu.serverlist.Sites.Endpoints.ServerRoute;
 import osu.serverlist.Sites.Endpoints.ServersRoute;
 import osu.serverlist.Sites.Endpoints.client.ClientServersRoute;
 import osu.serverlist.Sites.Models.Config;
+import osu.serverlist.v3.web.Admin;
 import osu.serverlist.v3.web.Categories;
 import osu.serverlist.v3.web.Server;
 import osu.serverlist.v3.web.Servers;
@@ -79,6 +80,7 @@ public class Api extends Spark {
 		router.get("/api/v3/server", new Server());
 		router.get("/api/v3/servers", new Servers());
 		router.get("/api/v3/categories", new Categories());
+		router.get("/api/v3/admin", new Admin());
 
 		router.get("/api/v1/heatmap", new ChartHeatMapRoute());
 		cmd.registerCommand(new ExceptionManager());
