@@ -7,6 +7,7 @@ import commons.marcandreher.Cache.CacheTimer;
 import commons.marcandreher.Commons.Database;
 import commons.marcandreher.Commons.Database.ServerTimezone;
 import commons.marcandreher.Commons.Flogger.Prefix;
+import commons.marcandreher.Engine.HealthRoute;
 import commons.marcandreher.Commons.Flogger;
 import commons.marcandreher.Commons.MySQL;
 import commons.marcandreher.Commons.Router;
@@ -81,6 +82,7 @@ public class Api extends Spark {
 		router.get("/api/v3/servers", new Servers());
 		router.get("/api/v3/categories", new Categories());
 		router.get("/api/v3/admin", new Admin());
+		router.get("/api/v3/health", new HealthRoute());
 
 		router.get("/api/v1/heatmap", new ChartHeatMapRoute());
 		cmd.registerCommand(new ExceptionManager());
