@@ -1,6 +1,7 @@
 package osu.serverlist.v3.models;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class ServerModel {
 
@@ -14,11 +15,10 @@ public class ServerModel {
 
     private boolean online;
 
-    private HashMap<Integer, String> categories;
+    private List<CategorieModel> categories;
     private HashMap<String, Integer> stats;
     private HashMap<String, String> created;
     private HashMap<String, String> customizations = new HashMap<>();
-
 
     public int getId() {
         return this.id;
@@ -72,37 +72,36 @@ public class ServerModel {
         this.online = online;
     }
 
-    public HashMap<Integer,String> getCategories() {
+    public List<CategorieModel> getCategories() {
         return this.categories;
     }
 
-    public void setCategories(HashMap<Integer,String> categories) {
+    public void setCategories(List<CategorieModel> categories) {
         this.categories = categories;
     }
 
-    public HashMap<String,Integer> getStats() {
+    public HashMap<String, Integer> getStats() {
         return this.stats;
     }
 
-    public void setStats(HashMap<String,Integer> stats) {
+    public void setStats(HashMap<String, Integer> stats) {
         this.stats = stats;
     }
 
-    public HashMap<String,String> getCreated() {
+    public HashMap<String, String> getCreated() {
         return this.created;
     }
 
-    public void setCreated(HashMap<String,String> created) {
+    public void setCreated(HashMap<String, String> created) {
         this.created = created;
     }
 
-    public HashMap<String,String> getCustomizations() {
+    public HashMap<String, String> getCustomizations() {
         return this.customizations;
     }
 
-    public void setCustomizations(HashMap<String,String> customizations) {
+    public void setCustomizations(HashMap<String, String> customizations) {
         this.customizations = customizations;
     }
-
 
 }

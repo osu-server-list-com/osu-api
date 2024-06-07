@@ -14,6 +14,7 @@ import osu.serverlist.Cache.CategoriesCh;
 import osu.serverlist.Cache.RefreshHeatmap;
 import osu.serverlist.Sites.Models.ServerHelper;
 import osu.serverlist.Sites.Models.Stats;
+import osu.serverlist.v3.models.CategorieModel;
 import osu.serverlist.v3.models.ServerModel;
 
 public class ServerQuery {
@@ -99,14 +100,24 @@ public class ServerQuery {
 
         server.setCustomizations(customizationMap);
 
-        HashMap<Integer, String> catMap = new HashMap<>();
+
+        List<CategorieModel> categories = new ArrayList<>();
+
+        
         for (String categorieStr : server.getSafe_categories().split(",")) {
+            CategorieModel model = new CategorieModel();
+
             int catId = Integer.parseInt(categorieStr);
+
             if (CategoriesCh.catMap.get(catId) == null)
                 continue;
-            catMap.put(catId, CategoriesCh.catMap.get(catId).getName());
+
+            model.setId(catId);
+            model.setName(CategoriesCh.catMap.get(catId).getName());
+            categories.add(model);
+           
         }
-        server.setCategories(catMap);
+        server.setCategories(categories);
 
         return server;
     }
