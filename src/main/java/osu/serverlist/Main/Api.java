@@ -41,6 +41,7 @@ public class Api extends Spark {
 	public static Dotenv env;
 
 	public static void main(String[] args) {
+		env = Dotenv.load();
 		Flogger logger = new Flogger (Integer.parseInt(env.get("LOGLEVEL")));
 		
 		MySQL.LOGLEVEL = 5;
