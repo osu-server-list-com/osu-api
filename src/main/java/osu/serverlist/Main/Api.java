@@ -6,14 +6,15 @@ import java.util.concurrent.TimeUnit;
 import commons.marcandreher.Cache.CacheTimer;
 import commons.marcandreher.Commons.Database;
 import commons.marcandreher.Commons.Database.ServerTimezone;
-import commons.marcandreher.Commons.Flogger.Prefix;
-import commons.marcandreher.Engine.HealthRoute;
 import commons.marcandreher.Commons.Flogger;
+import commons.marcandreher.Commons.Flogger.Prefix;
 import commons.marcandreher.Commons.MySQL;
 import commons.marcandreher.Commons.Router;
 import commons.marcandreher.Commons.WebServer;
+import commons.marcandreher.Engine.HealthRoute;
 import commons.marcandreher.Input.CommandHandler;
 import freemarker.template.Configuration;
+import io.github.cdimascio.dotenv.Dotenv;
 import osu.serverlist.Cache.CategoriesCh;
 import osu.serverlist.Cache.ClientKeys;
 import osu.serverlist.Cache.RefreshHeatmap;
@@ -26,7 +27,6 @@ import osu.serverlist.Sites.Endpoints.ChartTypesRoute;
 import osu.serverlist.Sites.Endpoints.ServerRoute;
 import osu.serverlist.Sites.Endpoints.ServersRoute;
 import osu.serverlist.Sites.Endpoints.client.ClientServersRoute;
-import osu.serverlist.Sites.Models.Config;
 import osu.serverlist.v3.web.Admin;
 import osu.serverlist.v3.web.Categories;
 import osu.serverlist.v3.web.Server;
@@ -38,17 +38,17 @@ public class Api extends Spark {
 	public static String verString = "1.0-BETA";
 
 	public static Configuration freemarkerCfg = new Configuration(Configuration.VERSION_2_3_23);
-	public static Config configObj;
+	public static Dotenv env;
 
 	public static void main(String[] args) {
-		configObj = Config.initializeNewConfig();
-		Flogger logger = new Flogger (configObj.getLogLevel());
+		Flogger logger = new Flogger (Integer.parseInt(env.get("LOGLEVEL")));
+		
 		MySQL.LOGLEVEL = 5;
 		Database database = new Database();
 		database.setDefaultSettings();
 		database.setMaximumPoolSize(5);
 		database.setConnectionTimeout(3000);
-		database.connectToMySQL(configObj.getServerIp(), configObj.getMySQLUserName(), configObj.getMySQLPassword(), configObj.getMySQLDatabase(), ServerTimezone.UTC);
+		database.connectToMySQL(env.get("DBHOST"), env.get("DBUSER"), env.get("DBPASS"), env.get("DBNAME"), ServerTimezone.UTC);
 
 		WebServer webServer = new WebServer(logger, (short)2);
 		webServer.setThreadPool(0, 20, 3000);
@@ -56,7 +56,7 @@ public class Api extends Spark {
 		CommandHandler cmd = new CommandHandler(logger);
 
 		try {
-			webServer.ignite(configObj.getServerIp(), configObj.getApiport(), cmd);
+			webServer.ignite(env.get("HOST"), Integer.parseInt(env.get("APIPORT")), cmd);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

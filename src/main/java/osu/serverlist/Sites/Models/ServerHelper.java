@@ -12,7 +12,7 @@ public class ServerHelper {
         if(logo.startsWith("http://") || logo.startsWith("https://")) {
             return logo;
         } else {
-            return Api.configObj.getDomain() + logo;
+            return Api.env.get("DOMAIN") + logo;
         }
     }
 
@@ -22,7 +22,7 @@ public class ServerHelper {
         if(banner.startsWith("http://") || banner.startsWith("https://")) {
             return banner;
         } else {
-            return Api.configObj.getDomain() + "/res/banner/" + banner;
+            return Api.env.get("DOMAIN") + "/res/banner/" + banner;
         }
     }
 
