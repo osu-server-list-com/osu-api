@@ -19,7 +19,7 @@ import osu.serverlist.v3.models.ServerModel;
 
 public class ServerQuery {
 
-    private final String SQL_QUERY = "SELECT `id`,`name`,`players`,`votes`,`url`,`logo_loc`,`created`,`online`,`categories`,`banner_url`,`discord_url` FROM un_servers WHERE `id` = ?";
+    private final String SQL_QUERY = "SELECT `id`,`name`,`players`,`votes`,`expired`,`url`,`logo_loc`,`created`,`online`,`categories`,`banner_url`,`discord_url` FROM un_servers WHERE `id` = ?";
 
     public ServerModel queryServer(int id, MySQL mysql) throws SQLException {
         ResultSet serverResultSet = mysql.Query(SQL_QUERY, String.valueOf(id));
@@ -69,6 +69,7 @@ public class ServerQuery {
         server.setCreated(createdMap);
 
         HashMap<String, Integer> statMap = new HashMap<>();
+        statMap.put("expired", serverResultSet.getInt("expired"));
         statMap.put("votes", serverResultSet.getInt("votes"));
         statMap.put("players", serverResultSet.getInt("players"));
 
