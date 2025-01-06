@@ -83,6 +83,7 @@ public class ServerQuery {
                 statMap.put("plays", moreStats.getplays());
                 statMap.put("clans", moreStats.getCLANS());
                 statMap.put("registered", moreStats.getregistered());
+                statMap.put("ping", moreStats.getPing());
             }
         } catch (Exception e) {
             Flogger.instance.log(Prefix.WARNING, "Date not found for Server [" + id + "] Date [" + ServerHelper.getDate() + "]", id);
