@@ -66,6 +66,9 @@ public class RefreshHeatmap extends DatabaseAction {
                         case "BANNED_PLAYERS":
                             stats.setbanned(value);
                             break;
+                        case "PING":
+                            stats.setPing(value);
+                            break;
                     }
                 }
 

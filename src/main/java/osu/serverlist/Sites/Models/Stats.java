@@ -10,7 +10,16 @@ public class Stats {
     private int players = 0;
     private int maps = 0;
     private int CLANS = 0;
+    private int ping = 0;
     public int votes = 0;
+
+    public int getPing() {
+        return this.ping;
+    }
+
+    public void setPing(int ping) {
+        this.ping = ping;
+    }
 
     public int getCLANS() {
         return this.CLANS;
