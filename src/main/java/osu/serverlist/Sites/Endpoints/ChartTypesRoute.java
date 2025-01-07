@@ -26,7 +26,9 @@ public class ChartTypesRoute extends JsonProcessingRoute {
         List<String> types = new ArrayList<>();
         try {
             while (serverResultSet.next()) {
-                types.add(serverResultSet.getString("type"));
+                String type = serverResultSet.getString("type");
+                if(type.equals("PING")) continue;
+                types.add(type);
             }
             return returnResponse(types);
         } catch (SQLException e) {
