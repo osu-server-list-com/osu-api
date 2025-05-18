@@ -37,6 +37,7 @@ public class ClientServersRoute extends JsonProcessingRoute {
                 v.setImage(ServerHelper.repairLogo(serverResultSet.getString("logo_loc")));
                 v.setPlayers(serverResultSet.getInt("players"));
                 v.setVotes(serverResultSet.getInt("votes"));
+                v.setOnline(serverResultSet.getInt("online") == 1);
                 v.setTimestamp(TimestampConverter.getDiffString(serverResultSet.getString("created")));
                 v.setDevserver(serverResultSet.getString("devserver"));
                 v.setUrl("https://" + serverResultSet.getString("url"));
